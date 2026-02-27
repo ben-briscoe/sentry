@@ -1,4 +1,4 @@
-# Surveilance \& ENforcement Response SYstem (SENTRY)
+# Surveilance \& ENforcemenT Response sYstem (SENTRY)
 
 INSY 6130 group project for Team 15
 
@@ -13,10 +13,4 @@ SENTRY will operatee as an overwatch UAS assigned to a defined crowd-control per
 ## Note
 
 This project contains AI generated images.
-
-
-
-
-
-
 
