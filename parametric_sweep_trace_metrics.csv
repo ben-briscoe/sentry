@@ -1,0 +1,6 @@
+time(ms),currentMissionMode,currentPropulsionPower,currentTotalPower,distanceToBaseRemaining,distanceToPerimeterRemaining,missionTime,patrolDistanceRemaining,remainingScenarioEnergy,tier1EngagementTimeRemaining,trackTimeRemaining
+0.0000,IDLE,,,0.0000,,0.0000,,,,
+10.0000,IDLE,0.0000,0.0000,0.0000,,0.0000,,,,
+13.0000,IDLE,0.0000,0.0000,0.0000,300.0000,0.0000,,6.0480E5,,
+14.0000,IDLE,0.0000,0.0000,0.0000,300.0000,0.0000,600.0000,6.0480E5,180.0000,300.0000
+23.0000,MISSION_FAIL,0.0000,0.0000,0.0000,300.0000,0.0000,600.0000,6.0480E5,180.0000,300.0000

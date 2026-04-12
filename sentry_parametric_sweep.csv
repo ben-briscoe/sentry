@@ -1,0 +1,2 @@
+availableScenarioEnergy,configurationSuitability,currentMissionMode,enduranceFeasibility,energyMargin,flightFeasibility,lowBatteryTriggered,missionComplete,missionEnergyTotal,missionTime,remainingScenarioEnergy,returnedEarly,returnEnergyRequired,tier1EnergyIncrement,sentry.thrustMargin
+6.0480E5,false,MISSION_FAIL,false,,false,false,false,,0.0000,6.0480E5,true,0.0000,3240.0000,81.4965
