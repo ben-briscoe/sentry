@@ -1,0 +1,123 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>edu.auburn.insy6130</groupId>
+  <artifactId>sentry-cameo-bridge</artifactId>
+  <version>0.1.0</version>
+  <name>SENTRY Cameo Bridge</name>
+  <description>Windows-side Cameo/MSOSA plugin scaffold for the SENTRY bridge.</description>
+
+  <properties>
+    <maven.compiler.release>11</maven.compiler.release>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <magicdraw.home>${env.MAGICDRAW_HOME}</magicdraw.home>
+    <magicdraw.lib>${magicdraw.home}/lib</magicdraw.lib>
+    <plugin.dist.dir>${project.build.directory}/plugin-dist/sentry-cameo-bridge</plugin.dist.dir>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.nomagic</groupId>
+      <artifactId>md_api</artifactId>
+      <version>2022xR2</version>
+      <scope>system</scope>
+      <systemPath>${magicdraw.lib}/md_api.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>com.nomagic</groupId>
+      <artifactId>utils</artifactId>
+      <version>2022xR2</version>
+      <scope>system</scope>
+      <systemPath>${magicdraw.lib}/com.nomagic.utils-2022.2.0-105-acd52bbc.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>com.nomagic</groupId>
+      <artifactId>magicdraw-modeling</artifactId>
+      <version>2022xR2</version>
+      <scope>system</scope>
+      <systemPath>${magicdraw.lib}/com.nomagic.magicdraw.modeling-2022.2.0-105-acd52bbc.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>com.nomagic</groupId>
+      <artifactId>magicdraw-uml2</artifactId>
+      <version>2022xR2</version>
+      <scope>system</scope>
+      <systemPath>${magicdraw.lib}/com.nomagic.magicdraw.uml2-2022.2.0-105-acd52bbc.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>com.nomagic</groupId>
+      <artifactId>magicdraw-foundation</artifactId>
+      <version>2022xR2</version>
+      <scope>system</scope>
+      <systemPath>${magicdraw.lib}/com.nomagic.magicdraw.foundation-2022.2.0-105-acd52bbc.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>com.dassault-systemes</groupId>
+      <artifactId>modeler-foundation</artifactId>
+      <version>2022xR2</version>
+      <scope>system</scope>
+      <systemPath>${magicdraw.lib}/com.dassault_systemes.modeler.foundation-2022.2.0-105-acd52bbc.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.emf</groupId>
+      <artifactId>ecore</artifactId>
+      <version>2022xR2</version>
+      <scope>system</scope>
+      <systemPath>${magicdraw.lib}/org.eclipse.emf.ecore-2.33.0.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.emf</groupId>
+      <artifactId>common</artifactId>
+      <version>2022xR2</version>
+      <scope>system</scope>
+      <systemPath>${magicdraw.lib}/org.eclipse.emf.common-2.28.0.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>javax.jmi</groupId>
+      <artifactId>jmi</artifactId>
+      <version>1.0</version>
+      <scope>system</scope>
+      <systemPath>${magicdraw.lib}/javax.jmi-1.0.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>com.nomagic</groupId>
+      <artifactId>simulation-api</artifactId>
+      <version>2022xR2</version>
+      <scope>system</scope>
+      <systemPath>${magicdraw.home}/plugins/com.nomagic.magicdraw.simulation/simulation_api.jar</systemPath>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <finalName>sentry-cameo-bridge</finalName>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.14.1</version>
+      </plugin>
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <id>package-plugin-dist</id>
+            <phase>package</phase>
+            <configuration>
+              <target>
+                <mkdir dir="${plugin.dist.dir}"/>
+                <copy file="${project.basedir}/plugin.xml" tofile="${plugin.dist.dir}/plugin.xml"/>
+                <copy file="${project.build.directory}/${project.build.finalName}.jar"
+                      tofile="${plugin.dist.dir}/${project.build.finalName}.jar"/>
+              </target>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

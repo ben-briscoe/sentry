@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sentry-bridge-api"
+version = "0.1.0"
+description = "Replay-first bridge and mission service scaffold for the SENTRY project."
+requires-python = ">=3.10"
+dependencies = [
+  "fastapi",
+  "uvicorn[standard]",
+  "pydantic"
+]
+
+[project.optional-dependencies]
+dev = [
+  "httpx",
+  "pytest"
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"

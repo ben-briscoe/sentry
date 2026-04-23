@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+    id="edu.auburn.insy6130.sentry.bridge"
+    name="SENTRY Cameo Bridge"
+    version="0.1.0"
+    provider-name="Auburn University Team 15"
+    class="edu.auburn.insy6130.sentry.bridge.SentryBridgePlugin">
+
+    <requires>
+        <api version="1.0"/>
+        <required-plugin id="SimulationToolkit" name="Cameo Simulation Toolkit"/>
+    </requires>
+
+    <runtime>
+        <library name="sentry-cameo-bridge.jar"/>
+    </runtime>
+</plugin>

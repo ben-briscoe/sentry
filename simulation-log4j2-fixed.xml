@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn" monitorInterval="30" packages="com.nomagic.magicdraw.simulation.utils.log">
+    <Appenders>
+        <SimulationConsoleAppender name="SimConsoleApp" beforeAppendConditionType="com.nomagic.magicdraw.simulation.gui.panel.predefined.AllowUpdatePanelCondition">
+            <PatternLayout/>
+        </SimulationConsoleAppender>
+        <SimulationConsoleAppender name="SimConsoleAppNoCondition">
+            <PatternLayout/>
+        </SimulationConsoleAppender>
+        <SimulationConsoleAppender name="SimCommandConsoleApp" beforeAppendConditionType="com.nomagic.magicdraw.simulation.gui.panel.predefined.AllowUpdatePanelCondition">
+            <PatternLayout/>
+        </SimulationConsoleAppender>
+        <SimulationConsoleAppender name="SimPlainConsoleApp" beforeAppendConditionType="com.nomagic.magicdraw.simulation.gui.panel.predefined.AllowUpdatePanelCondition">
+            <PatternLayout/>
+        </SimulationConsoleAppender>
+        <SimulationConsoleAppender name="SimUserOutputConsoleApp" beforeAppendConditionType="com.nomagic.magicdraw.simulation.gui.panel.predefined.AllowUpdatePanelCondition">
+            <PatternLayout/>
+        </SimulationConsoleAppender>
+        <RollingFile name="SimXMLApp" fileName="${sim:simlog_location}/simulation.log" filePattern="${sim:simlog_location}/$${date:yyyy-MM}/simulation-%d{MM-dd-yyyy}-%i.log.gz">
+            <SimulationXMLLayout charset="UTF-8" />
+            <Policies>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Logger name="SIM_CONSOLE" level="error" additivity="false">
+            <AppenderRef ref="SimConsoleApp"/>
+            <AppenderRef ref="SimXMLApp"/>
+        </Logger>
+        <Logger name="SIM_COMMAND_CONSOLE" level="error" additivity="false">
+            <AppenderRef ref="SimCommandConsoleApp"/>
+            <AppenderRef ref="SimXMLApp"/>
+        </Logger>
+        <Logger name="SIM_PLAIN_CONSOLE" level="error" additivity="false">
+            <AppenderRef ref="SimPlainConsoleApp"/>
+            <AppenderRef ref="SimXMLApp"/>
+        </Logger>
+        <Logger name="SIM_CONSOLE_NO_CONDITION" level="error" additivity="false">
+            <AppenderRef ref="SimConsoleAppNoCondition"/>
+            <AppenderRef ref="SimXMLApp"/>
+        </Logger>
+        <Logger name="SIM_USER_OUTPUT_CONSOLE" level="error" additivity="false">
+            <AppenderRef ref="SimUserOutputConsoleApp"/>
+            <AppenderRef ref="SimXMLApp"/>
+        </Logger>
+
+        <Logger name="org.apache.commons.scxml" level="info" additivity="false">
+            <AppenderRef ref="SimXMLApp"/>
+        </Logger>
+        <Logger name="com.nomagic.magicdraw.simulation" level="info" additivity="false">
+            <AppenderRef ref="SimXMLApp"/>
+        </Logger>
+    </Loggers>
+</Configuration>

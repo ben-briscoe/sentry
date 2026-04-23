@@ -1,0 +1,35 @@
+{
+  "name": "sentry-bridge-web",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "dependencies": {
+    "cesium": "^1.132.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/react": "^19.2.9",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.0.4",
+    "eslint": "^10.2.1",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "globals": "^17.5.0",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.59.0",
+    "vite": "^7.3.2"
+  },
+  "scripts": {
+    "prepare:cesium": "node scripts/sync_cesium_assets.mjs",
+    "build": "vite build",
+    "dev": "vite",
+    "lint": "eslint \"src/**/*.{ts,tsx}\"",
+    "prebuild": "npm run prepare:cesium",
+    "predev": "npm run prepare:cesium",
+    "preview": "vite preview",
+    "prepreview": "npm run prepare:cesium",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  }
+}

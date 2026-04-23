@@ -1,0 +1,107 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+import argparse
+import os
+import pathlib
+import shutil
+import subprocess
+import sys
+
+
+PROJECT_NAME = "sentry_bridge"
+
+REPO_ROOT = pathlib.Path(__file__).resolve().parent
+API_DIR = REPO_ROOT / "apps" / "api"
+WEB_DIR = REPO_ROOT / "apps" / "web"
+PLUGIN_DIST_DIR = REPO_ROOT / "apps" / "cameo-plugin" / "target" / "plugin-dist" / "sentry-cameo-bridge"
+RELEASE_DIR = REPO_ROOT / "release"
+STAGE_WEB_DIR = RELEASE_DIR / "web"
+STAGE_PLUGIN_DIR = RELEASE_DIR / "plugins" / "sentry-cameo-bridge"
+def resolve_tool( name: str ) -> str:
+    env_bin = os.environ.get( "SENTRY_BRIDGE_ENV_BIN" )
+    if env_bin:
+        candidate = pathlib.Path( env_bin ) / name
+        if candidate.exists():
+            return str( candidate )
+    resolved = shutil.which( name )
+    if resolved:
+        return resolved
+    raise RuntimeError(
+        f"Could not locate '{name}'. Put it on PATH or set SENTRY_BRIDGE_ENV_BIN to a bin directory that contains it."
+    )
+
+
+def run(cmd: list[str], *, cwd: pathlib.Path) -> None:
+    subprocess.run(cmd, cwd=str(cwd), check=True, env=os.environ.copy())
+
+
+def stage_web_build() -> None:
+    run([resolve_tool( "npm" ), "run", "build"], cwd=WEB_DIR)
+    source = WEB_DIR / "dist"
+    if not source.exists():
+        raise RuntimeError(f"Expected built web output at {source}")
+    if STAGE_WEB_DIR.exists():
+        shutil.rmtree(STAGE_WEB_DIR)
+    STAGE_WEB_DIR.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copytree(source, STAGE_WEB_DIR)
+
+
+def stage_plugin_dist() -> None:
+    if not PLUGIN_DIST_DIR.exists():
+        return
+    if STAGE_PLUGIN_DIR.exists():
+        shutil.rmtree(STAGE_PLUGIN_DIR)
+    STAGE_PLUGIN_DIR.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copytree(PLUGIN_DIST_DIR, STAGE_PLUGIN_DIR)
+
+
+def write_run_wrapper() -> pathlib.Path:
+    wrapper = RELEASE_DIR / "run_sentry_bridge_linux.sh"
+    RELEASE_DIR.mkdir(parents=True, exist_ok=True)
+    script = f"""#!/usr/bin/env bash
+set -euo pipefail
+ROOT_DIR="$(cd "$(dirname "${{BASH_SOURCE[0]}}")/.." && pwd)"
+API_DIR="${{ROOT_DIR}}/apps/api"
+SPA_DIR="${{ROOT_DIR}}/release/web"
+
+if [[ -n "${{SENTRY_BRIDGE_ENV_BIN:-}}" && -x "${{SENTRY_BRIDGE_ENV_BIN}}/python" ]]; then
+  PYTHON_BIN="${{SENTRY_BRIDGE_ENV_BIN}}/python"
+else
+  PYTHON_BIN="$(command -v python3 || command -v python)"
+fi
+
+if [[ -z "${{PYTHON_BIN:-}}" ]]; then
+  echo "Python 3 was not found. Put it on PATH or set SENTRY_BRIDGE_ENV_BIN." >&2
+  exit 1
+fi
+
+cd "${{API_DIR}}"
+exec "${{PYTHON_BIN}}" -m app.main --host 127.0.0.1 --port 8000 --spa-dir "${{SPA_DIR}}" "$@"
+"""
+    wrapper.write_text(script, encoding="utf-8")
+    wrapper.chmod(0o755)
+    return wrapper
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Build and stage the SENTRY integrated SPA/API server.")
+    parser.add_argument("--web-only", action="store_true", help="Only build and stage the web SPA.")
+    return parser.parse_args()
+
+
+def main() -> int:
+    args = parse_args()
+    stage_web_build()
+    stage_plugin_dist()
+    if not args.web_only:
+        wrapper = write_run_wrapper()
+        print(f"Integrated launcher created: {wrapper}")
+        print(f"Staged SPA directory: {STAGE_WEB_DIR}")
+    else:
+        print(f"Staged SPA directory: {STAGE_WEB_DIR}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
